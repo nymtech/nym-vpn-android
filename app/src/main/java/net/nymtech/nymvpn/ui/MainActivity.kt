@@ -128,8 +128,8 @@ class MainActivity : ComponentActivity() {
               }
               composable(NavItem.Settings.Display.route) { DisplayScreen() }
               composable(NavItem.Settings.Logs.route) { LogsScreen() }
-              composable(NavItem.Settings.Support.route) { SupportScreen() }
-              composable(NavItem.Settings.Feedback.route) { FeedbackScreen() }
+              composable(NavItem.Settings.Support.route) { SupportScreen({ message -> showSnackBarMessage(message) }) }
+              composable(NavItem.Settings.Feedback.route) { FeedbackScreen({ message -> showSnackBarMessage(message) }) }
               composable(NavItem.Settings.Legal.route) { LegalScreen() }
               composable(NavItem.Settings.Login.route) { LoginScreen(navController, showSnackbarMessage = { message -> showSnackBarMessage(message) } ) }
               composable(NavItem.Settings.Account.route) { AccountScreen() }

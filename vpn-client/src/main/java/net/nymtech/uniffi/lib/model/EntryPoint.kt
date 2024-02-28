@@ -2,6 +2,7 @@ package net.nymtech.uniffi.lib.model
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 
 @Serializable
 sealed class EntryPoint {

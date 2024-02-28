@@ -21,6 +21,7 @@ import net.nymtech.nymvpn.util.scaledHeight
 import net.nymtech.nymvpn.util.scaledWidth
 import timber.log.Timber
 
+
 @Composable
 fun LegalScreen() {
 
@@ -39,16 +40,19 @@ fun LegalScreen() {
       horizontalAlignment = Alignment.Start,
       verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.Top),
       modifier =
-          Modifier.verticalScroll(rememberScrollState())
-              .fillMaxSize()
-              .padding(top = 24.dp.scaledHeight())
-              .padding(horizontal = 24.dp.scaledWidth())) {
+      Modifier
+          .verticalScroll(rememberScrollState())
+          .fillMaxSize()
+          .padding(top = 24.dp.scaledHeight())
+          .padding(horizontal = 24.dp.scaledWidth())) {
         SurfaceSelectionGroupButton(
             listOf(
                 SelectionItem(title = stringResource(R.string.terms_of_use), onClick = {}),
                 SelectionItem(
                     title = stringResource(R.string.privacy_policy),
                     onClick = { openWebPage(context.getString(R.string.privacy_link)) }),
-                SelectionItem(title = stringResource(R.string.licenses), onClick = {})))
+                SelectionItem(title = stringResource(R.string.licenses), onClick = {
+                    openWebPage("file:///android_asset/open_source_licenses.html")
+                })))
       }
 }

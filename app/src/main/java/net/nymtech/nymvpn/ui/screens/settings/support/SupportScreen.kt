@@ -1,5 +1,6 @@
 package net.nymtech.nymvpn.ui.screens.settings.support
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
@@ -23,20 +24,21 @@ import net.nymtech.nymvpn.R
 import net.nymtech.nymvpn.ui.common.buttons.SelectionItem
 import net.nymtech.nymvpn.ui.common.buttons.SurfaceSelectionGroupButton
 import net.nymtech.nymvpn.util.Constants
+import net.nymtech.nymvpn.util.StringValue
 import net.nymtech.nymvpn.util.scaledHeight
 import net.nymtech.nymvpn.util.scaledWidth
 import timber.log.Timber
 
 @Composable
-fun SupportScreen() {
+fun SupportScreen(showSnackbarMessage: (StringValue) -> Unit) {
     val context = LocalContext.current
     fun openWebPage(url: String) {
         try {
             val webpage: Uri = Uri.parse(url)
             val intent = Intent(Intent.ACTION_VIEW, webpage)
             context.startActivity(intent)
-        } catch (e: Exception) {
-            Timber.e("Failed to launch webpage")
+        } catch (e: ActivityNotFoundException) {
+            showSnackbarMessage(StringValue.StringResource(R.string.no_browser_detected))
         }
     }
 
@@ -53,8 +55,9 @@ fun SupportScreen() {
                 Intent.createChooser(intent, context.getString(R.string.email_chooser)),
                 null,
             )
-        } catch (e: Exception) {
-            //TODO handle exception like no email client
+        } catch (e: ActivityNotFoundException) {
+            showSnackbarMessage(StringValue.StringResource(R.string.no_email_detected))
+
         }
     }
 

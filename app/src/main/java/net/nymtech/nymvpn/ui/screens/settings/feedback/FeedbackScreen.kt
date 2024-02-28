@@ -1,5 +1,6 @@
 package net.nymtech.nymvpn.ui.screens.settings.feedback
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
@@ -25,12 +26,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import net.nymtech.nymvpn.R
 import net.nymtech.nymvpn.ui.common.buttons.SelectionItem
 import net.nymtech.nymvpn.ui.common.buttons.SurfaceSelectionGroupButton
+import net.nymtech.nymvpn.util.StringValue
 import net.nymtech.nymvpn.util.scaledHeight
 import net.nymtech.nymvpn.util.scaledWidth
 import timber.log.Timber
 
 @Composable
-fun FeedbackScreen(viewModel: FeedbackViewModel = hiltViewModel()) {
+fun FeedbackScreen(showSnackbarMessage: (StringValue) -> Unit, viewModel: FeedbackViewModel = hiltViewModel()) {
 
   val isErrorReportingEnabled by viewModel.isErrorReportingEnabled.collectAsStateWithLifecycle()
 
@@ -40,8 +42,8 @@ fun FeedbackScreen(viewModel: FeedbackViewModel = hiltViewModel()) {
       val webpage: Uri = Uri.parse(url)
       val intent = Intent(Intent.ACTION_VIEW, webpage)
       context.startActivity(intent)
-    } catch (e: Exception) {
-      Timber.e("Failed to launch webpage")
+    } catch (e: ActivityNotFoundException) {
+        showSnackbarMessage(StringValue.StringResource(R.string.no_browser_detected))
     }
   }
 

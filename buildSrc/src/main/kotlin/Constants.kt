@@ -10,7 +10,7 @@ object Constants {
     const val JVM_TARGET = "17"
     val JAVA_VERSION = JavaVersion.VERSION_17
 
-    const val COMPOSE_COMPILER_EXTENSION_VERSION = "1.5.8"
+    const val COMPOSE_COMPILER_EXTENSION_VERSION = "1.5.10"
     const val NAMESPACE = "net.nymtech"
 
     const val APP_NAME = "nymvpn"
@@ -29,4 +29,8 @@ object Constants {
     const val BUILD_LIB_TASK = "buildDeps"
 
     const val SANDBOX_URL = "https://sandbox-nym-api1.nymtech.net/api"
+
+    //licensee
+    val allowedLicenses = listOf("MIT", "Apache-2.0", "BSD-3-Clause")
+    const val ANDROID_TERMS_URL = "https://developer.android.com/studio/terms.html"
 }
