@@ -30,7 +30,7 @@ window = "1.2.0"
 windowCoreAndroid = "1.3.0-alpha02"
 desugar = "2.0.4"
 
-gradlePlugins-kotlinxSerialization = "1.8.21"
+gradlePlugins-kotlinxSerialization = "1.9.22"
 gradlePlugins-licensee = "1.7.0"
 gradlePlugins-detekt = "1.23.1"
 gradlePlugins-gross = "0.1.0"
