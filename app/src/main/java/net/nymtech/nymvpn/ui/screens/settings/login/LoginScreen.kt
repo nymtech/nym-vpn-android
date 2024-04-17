@@ -1,6 +1,7 @@
 package net.nymtech.nymvpn.ui.screens.settings.login
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,10 +12,14 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,6 +32,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -36,12 +43,15 @@ import net.nymtech.nymvpn.ui.AppViewModel
 import net.nymtech.nymvpn.ui.NavItem
 import net.nymtech.nymvpn.ui.common.buttons.MainStyledButton
 import net.nymtech.nymvpn.ui.common.functions.rememberImeState
+import net.nymtech.nymvpn.ui.common.textbox.CustomTextField
+import net.nymtech.nymvpn.ui.theme.CustomColors
 import net.nymtech.nymvpn.util.Constants
 import net.nymtech.nymvpn.util.Event
 import net.nymtech.nymvpn.util.Result
 import net.nymtech.nymvpn.util.scaledHeight
 import net.nymtech.nymvpn.util.scaledWidth
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController: NavController, appViewModel: AppViewModel, viewModel: LoginViewModel = hiltViewModel()) {
 	val context = LocalContext.current
@@ -112,16 +122,13 @@ fun LoginScreen(navController: NavController, appViewModel: AppViewModel, viewMo
 			)
 		}
 		val isLoginError = error is Event.Error.LoginFailed
-		OutlinedTextField(
-			value = recoveryPhrase,
-			onValueChange = {
-				if (isLoginError) error = Event.Error.None
-				recoveryPhrase = it
-			},
-			label = { Text(text = stringResource(id = R.string.credential_label)) },
-			minLines = 3,
-			maxLines = 3,
-			isError = isLoginError,
+		CustomTextField(value = recoveryPhrase, onValueChange = {
+			if (isLoginError) error = Event.Error.None
+			recoveryPhrase = it
+		},
+			modifier = Modifier
+				.width(342.dp.scaledWidth())
+				.height(196.dp.scaledHeight()),
 			supportingText = {
 				if (isLoginError) {
 					Text(
@@ -131,10 +138,7 @@ fun LoginScreen(navController: NavController, appViewModel: AppViewModel, viewMo
 					)
 				}
 			},
-			modifier =
-			Modifier
-				.width(342.dp.scaledWidth())
-				.height(196.dp.scaledHeight()),
+			isError = isLoginError
 		)
 		Box(
 			modifier =

@@ -226,7 +226,6 @@ dependencies {
 	debugImplementation(libs.androidx.ui.test.manifest)
 
 	// util
-	implementation(libs.accompanist.systemuicontroller)
 	implementation(libs.accompanist.permissions)
 	implementation(libs.lifecycle.runtime.compose)
 	implementation(libs.kotlinx.serialization)

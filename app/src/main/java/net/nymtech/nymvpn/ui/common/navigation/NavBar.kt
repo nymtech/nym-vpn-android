@@ -1,5 +1,10 @@
 package net.nymtech.nymvpn.ui.common.navigation
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -12,9 +17,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import net.nymtech.nymvpn.ui.AppViewModel
@@ -33,56 +42,50 @@ fun NavBar(appViewModel: AppViewModel, navController: NavController) {
 		keyboardController?.hide()
 	}
 
-	CenterAlignedTopAppBar(
-		title = {
-			Text(
-				navItem.title.asString(context),
-				style = MaterialTheme.typography.titleLarge,
-			)
-		},
-		colors =
-		if (navItem.title.asString(context) == "") {
-			TopAppBarDefaults.centerAlignedTopAppBarColors()
-				.copy(
-					containerColor = Color.Transparent,
+	val emptyTitle = navItem.title.asString(context) == ""
+	AnimatedVisibility(!emptyTitle) {
+		CenterAlignedTopAppBar(
+			title = {
+				Text(
+					navItem.title.asString(context),
+					style = MaterialTheme.typography.titleLarge,
 				)
-		} else {
-			TopAppBarDefaults.centerAlignedTopAppBarColors()
-		},
-		actions = {
-			navItem.trailing?.let {
-				IconButton(
-					onClick = {
-						when (it) {
-							NavItem.settingsIcon -> navController.navigate(NavItem.Settings.route)
-							NavItem.clearLogsIcon -> appViewModel.clearLogs()
-						}
-					},
-				) {
-					Icon(
-						imageVector = it,
-						contentDescription = it.name,
-						tint = MaterialTheme.colorScheme.onSurface,
-						modifier =
-						Modifier.size(
-							iconSize,
-						),
-					)
+			},
+			actions = {
+				navItem.trailing?.let {
+					IconButton(
+						onClick = {
+							when (it) {
+								NavItem.settingsIcon -> navController.navigate(NavItem.Settings.route)
+								NavItem.clearLogsIcon -> appViewModel.clearLogs()
+							}
+						},
+					) {
+						Icon(
+							imageVector = it,
+							contentDescription = it.name,
+							tint = MaterialTheme.colorScheme.onSurface,
+							modifier =
+							Modifier.size(
+								iconSize,
+							),
+						)
+					}
 				}
-			}
-		},
-		navigationIcon = {
-			navItem.leading?.let {
-				IconButton(
-					onClick = {
-						when {
-							it == NavItem.backIcon -> navController.popBackStack()
-						}
-					},
-				) {
-					Icon(imageVector = it, contentDescription = it.name)
+			},
+			navigationIcon = {
+				navItem.leading?.let {
+					IconButton(
+						onClick = {
+							when {
+								it == NavItem.backIcon -> navController.popBackStack()
+							}
+						},
+					) {
+						Icon(imageVector = it, contentDescription = it.name)
+					}
 				}
-			}
-		},
-	)
+			},
+		)
+	}
 }

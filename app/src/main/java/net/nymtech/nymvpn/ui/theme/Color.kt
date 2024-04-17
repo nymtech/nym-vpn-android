@@ -42,6 +42,7 @@ val primary = Color(0xFFFB6E4E)
 val secondary = Color(0XFF625B71)
 
 object CustomColors {
+	val outlineVariant = Color(0xFF49454F)
 	val confirm = Color(0xFF2BC761)
 	val statusGreen = Color(0x1A47C45D)
 	val statusDefaultDark = Color(0x31303329)

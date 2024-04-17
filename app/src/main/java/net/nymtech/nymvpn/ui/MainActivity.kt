@@ -45,7 +45,6 @@ import net.nymtech.nymvpn.ui.screens.settings.login.LoginScreen
 import net.nymtech.nymvpn.ui.screens.settings.logs.LogsScreen
 import net.nymtech.nymvpn.ui.screens.settings.support.SupportScreen
 import net.nymtech.nymvpn.ui.theme.NymVPNTheme
-import net.nymtech.nymvpn.ui.theme.TransparentSystemBars
 import net.nymtech.nymvpn.util.Constants
 import net.nymtech.nymvpn.util.StringValue
 import javax.inject.Inject
@@ -123,8 +122,6 @@ class MainActivity : ComponentActivity() {
 			}
 
 			NymVPNTheme(theme = uiState.theme) {
-				// A surface container using the 'background' color from the theme
-				TransparentSystemBars()
 				Scaffold(
 					Modifier.semantics {
 						// Enables testTag -> UiAutomator resource id

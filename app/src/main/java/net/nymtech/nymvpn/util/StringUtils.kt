@@ -34,4 +34,5 @@ object StringUtils {
 			resourceId
 		}
 	}
+
 }

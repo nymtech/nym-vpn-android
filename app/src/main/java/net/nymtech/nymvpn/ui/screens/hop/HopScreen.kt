@@ -31,7 +31,7 @@ import net.nymtech.nymvpn.R
 import net.nymtech.nymvpn.ui.AppViewModel
 import net.nymtech.nymvpn.ui.HopType
 import net.nymtech.nymvpn.ui.NavItem
-import net.nymtech.nymvpn.ui.common.SearchBar
+import net.nymtech.nymvpn.ui.common.textbox.SearchBar
 import net.nymtech.nymvpn.ui.common.buttons.SelectionItemButton
 import net.nymtech.nymvpn.ui.theme.iconSize
 import net.nymtech.nymvpn.util.StringUtils

@@ -1,4 +1,4 @@
-package net.nymtech.nymvpn.ui.common
+package net.nymtech.nymvpn.ui.common.textbox
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
