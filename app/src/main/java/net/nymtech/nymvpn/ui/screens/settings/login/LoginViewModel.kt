@@ -16,7 +16,7 @@ constructor(
 	private val settingsRepository: SettingsRepository,
 ) : ViewModel() {
 	fun onLogin(credential: String): Result<Event> {
-		//TODO had lib base58 validation check call
+		// TODO had lib base58 validation check call
 		return if (credential.isNotEmpty()) {
 			saveLogin()
 			Result.Success(Event.Message.None)

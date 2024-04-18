@@ -1,7 +1,6 @@
 package net.nymtech.nymvpn.ui.screens.settings.login
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,14 +11,9 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -32,8 +26,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,14 +36,12 @@ import net.nymtech.nymvpn.ui.NavItem
 import net.nymtech.nymvpn.ui.common.buttons.MainStyledButton
 import net.nymtech.nymvpn.ui.common.functions.rememberImeState
 import net.nymtech.nymvpn.ui.common.textbox.CustomTextField
-import net.nymtech.nymvpn.ui.theme.CustomColors
 import net.nymtech.nymvpn.util.Constants
 import net.nymtech.nymvpn.util.Event
 import net.nymtech.nymvpn.util.Result
 import net.nymtech.nymvpn.util.scaledHeight
 import net.nymtech.nymvpn.util.scaledWidth
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController: NavController, appViewModel: AppViewModel, viewModel: LoginViewModel = hiltViewModel()) {
 	val context = LocalContext.current
@@ -89,9 +79,8 @@ fun LoginScreen(navController: NavController, appViewModel: AppViewModel, viewMo
 			contentScale = ContentScale.None,
 			modifier =
 			Modifier
-				.padding(5.dp.scaledHeight())
-				.width(120.dp)
-				.height(120.dp),
+				.width(80.dp)
+				.height(80.dp),
 		)
 		Column(
 			horizontalAlignment = Alignment.CenterHorizontally,
@@ -104,7 +93,7 @@ fun LoginScreen(navController: NavController, appViewModel: AppViewModel, viewMo
 				),
 		) {
 			Text(
-				text = stringResource(id = R.string.welcome),
+				text = stringResource(id = R.string.welcome_exclaim),
 				style = MaterialTheme.typography.headlineSmall,
 				color = MaterialTheme.colorScheme.onBackground,
 			)
@@ -121,57 +110,68 @@ fun LoginScreen(navController: NavController, appViewModel: AppViewModel, viewMo
 				textAlign = TextAlign.Center,
 			)
 		}
-		val isLoginError = error is Event.Error.LoginFailed
-		CustomTextField(value = recoveryPhrase, onValueChange = {
-			if (isLoginError) error = Event.Error.None
-			recoveryPhrase = it
-		},
-			modifier = Modifier
-				.width(342.dp.scaledWidth())
-				.height(196.dp.scaledHeight()),
-			supportingText = {
-				if (isLoginError) {
-					Text(
-						modifier = Modifier.fillMaxWidth(),
-						text = error.message.asString(context),
-						color = MaterialTheme.colorScheme.error,
-					)
-				}
-			},
-			isError = isLoginError
-		)
-		Box(
-			modifier =
-			Modifier
-				.padding(bottom = 24.dp.scaledHeight()),
+		Column(
+			horizontalAlignment = Alignment.CenterHorizontally,
+			verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.Top),
 		) {
-			MainStyledButton(
-				Constants.LOGIN_TEST_TAG,
-				onClick = {
-					viewModel.onLogin(recoveryPhrase).let {
-						when (it) {
-							is Result.Success -> {
-								navController.navigate(NavItem.Main.route) {
-									// clear backstack after login
-									popUpTo(0)
-								}
-								appViewModel.showSnackbarMessage(
-									context.getString(R.string.credential_successful),
-								)
-							}
-
-							is Result.Error -> error = it.error
-						}
+			val isLoginError = error is Event.Error.LoginFailed
+			CustomTextField(
+				value = recoveryPhrase,
+				onValueChange = {
+					if (isLoginError) error = Event.Error.None
+					recoveryPhrase = it
+				},
+				modifier = Modifier
+					.width(358.dp.scaledWidth())
+					.height(212.dp.scaledHeight()),
+				supportingText = {
+					if (isLoginError) {
+						Text(
+							modifier = Modifier.fillMaxWidth(),
+							text = error.message.asString(context),
+							color = MaterialTheme.colorScheme.error,
+						)
 					}
 				},
-				content = {
-					Text(
-						stringResource(id = R.string.add_credential),
-						style = MaterialTheme.typography.labelLarge,
-					)
-				},
-				color = MaterialTheme.colorScheme.primary,
+				isError = isLoginError,
+				label = { Text(text = stringResource(id = R.string.credential_label)) },
+				textStyle = MaterialTheme.typography.bodyMedium.copy(
+					color = MaterialTheme.colorScheme.onSurface,
+				),
 			)
+			Box(
+				modifier =
+				Modifier
+					.padding(bottom = 24.dp.scaledHeight()),
+			) {
+				MainStyledButton(
+					Constants.LOGIN_TEST_TAG,
+					onClick = {
+						viewModel.onLogin(recoveryPhrase).let {
+							when (it) {
+								is Result.Success -> {
+									navController.navigate(NavItem.Main.route) {
+										// clear backstack after login
+										popUpTo(0)
+									}
+									appViewModel.showSnackbarMessage(
+										context.getString(R.string.credential_successful),
+									)
+								}
+
+								is Result.Error -> error = it.error
+							}
+						}
+					},
+					content = {
+						Text(
+							stringResource(id = R.string.add_credential),
+							style = MaterialTheme.typography.labelLarge,
+						)
+					},
+					color = MaterialTheme.colorScheme.primary,
+				)
+			}
 		}
 	}
 }

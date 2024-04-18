@@ -6,43 +6,65 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import net.nymtech.nymvpn.R
 import net.nymtech.nymvpn.ui.theme.CustomColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomTextField(value: String, onValueChange: (value : String) -> Unit, modifier: Modifier, singleLine: Boolean = false, supportingText: @Composable (() -> Unit)? = null, leading: @Composable (() -> Unit)? = null, isError: Boolean = false) {
+fun CustomTextField(
+	value: String,
+	textStyle: TextStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onSurface),
+	label: @Composable (() -> Unit),
+	onValueChange: (value: String) -> Unit = {},
+	modifier: Modifier = Modifier,
+	singleLine: Boolean = false,
+	placeholder: @Composable (() -> Unit)? = null,
+	supportingText: @Composable (() -> Unit)? = null,
+	leading: @Composable (() -> Unit)? = null,
+	trailing: @Composable (() -> Unit)? = null,
+	isError: Boolean = false,
+	readOnly: Boolean = false,
+	enabled: Boolean = true,
+) {
 	val interactionSource = remember { MutableInteractionSource() }
+	val space = " "
 	BasicTextField(
 		value = value,
-		textStyle = MaterialTheme.typography.bodyMedium.copy(
-			color = MaterialTheme.colorScheme.onSurface,
-		),
+		textStyle = textStyle,
 		onValueChange = {
 			onValueChange(it)
 		},
+		readOnly = readOnly,
 		cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurface),
 		modifier = modifier,
 		interactionSource = interactionSource,
-		enabled = true,
+		enabled = enabled,
 		singleLine = singleLine,
 	) {
 		OutlinedTextFieldDefaults.DecorationBox(
-			value = value,
-			innerTextField = it,
+			value = space + value,
+			innerTextField = {
+				if (value.isEmpty()) {
+					if (placeholder != null) {
+						placeholder()
+					}
+				}
+				it.invoke()
+			},
 			leadingIcon = leading,
+			trailingIcon = trailing,
 			singleLine = singleLine,
 			supportingText = supportingText,
 			colors = TextFieldDefaults.colors().copy(
+				disabledLabelColor = MaterialTheme.colorScheme.onSurface,
+				disabledContainerColor = MaterialTheme.colorScheme.background,
 				focusedIndicatorColor = CustomColors.outlineVariant,
 				disabledIndicatorColor = CustomColors.outlineVariant,
 				unfocusedIndicatorColor = CustomColors.outlineVariant,
@@ -52,16 +74,19 @@ fun CustomTextField(value: String, onValueChange: (value : String) -> Unit, modi
 				focusedTextColor = MaterialTheme.colorScheme.onSurface,
 				cursorColor = MaterialTheme.colorScheme.onSurface,
 			),
-			enabled = true,
-			label = { Text(text = stringResource(id = R.string.credential_label)) },
+			enabled = enabled,
+			label = label,
 			visualTransformation = VisualTransformation.None,
 			interactionSource = interactionSource,
+			placeholder = placeholder,
 			container = {
 				OutlinedTextFieldDefaults.ContainerBox(
-					true,
+					enabled,
 					isError = isError,
 					interactionSource,
 					colors = TextFieldDefaults.colors().copy(
+						disabledLabelColor = MaterialTheme.colorScheme.onSurface,
+						disabledContainerColor = MaterialTheme.colorScheme.background,
 						focusedIndicatorColor = CustomColors.outlineVariant,
 						disabledIndicatorColor = CustomColors.outlineVariant,
 						unfocusedIndicatorColor = CustomColors.outlineVariant,
@@ -71,11 +96,11 @@ fun CustomTextField(value: String, onValueChange: (value : String) -> Unit, modi
 						focusedTextColor = MaterialTheme.colorScheme.onSurface,
 						cursorColor = MaterialTheme.colorScheme.onSurface,
 					),
-					shape = RoundedCornerShape(4.dp),
+					shape = RoundedCornerShape(8.dp),
 					focusedBorderThickness = 0.5.dp,
-					unfocusedBorderThickness = 0.5.dp
+					unfocusedBorderThickness = 0.5.dp,
 				)
-			}
+			},
 		)
 	}
 }
