@@ -1,0 +1,3 @@
+What's new:
+- UI improvements
+- Add credential trimming
