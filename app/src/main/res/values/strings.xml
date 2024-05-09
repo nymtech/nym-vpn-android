@@ -38,7 +38,7 @@
     <string name="error_reporting">Share anonymous error reports</string>
 	<string name="sentry">Sentry</string>
 	<string name="via">via</string>
-    <string name="required_app_restart">applies on app restart</string>
+    <string name="required_app_restart">applies on restart</string>
     <string name="legal">Legal</string>
     <string name="faq_link" translatable="false">https://nymtech.net</string>
     <string name="privacy_link" translatable="false">https://nymvpn.com/en/privacy?type=apps</string>
