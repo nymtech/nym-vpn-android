@@ -35,7 +35,7 @@ class ShortcutActivity : ComponentActivity() {
 						vpnManager.stopVpn(this@ShortcutActivity, true)
 					}
 				}
-			}
+			} else Timber.w("Shortcuts not enabled")
 		}
 		finish()
 	}
