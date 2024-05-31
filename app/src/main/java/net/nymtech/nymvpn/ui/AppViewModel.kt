@@ -86,11 +86,13 @@ constructor(
 			AppUiState(),
 		)
 
-	private fun setCredentialExpiry(instant: Instant) {
-		_uiState.update {
-			it.copy(
-				credentialExpiryTime = instant,
-			)
+	private fun setCredentialExpiry(instant: Instant?) {
+		instant?.let {
+			_uiState.update {
+				it.copy(
+					credentialExpiryTime = instant,
+				)
+			}
 		}
 	}
 
@@ -102,7 +104,7 @@ constructor(
 		}
 	}
 
-	suspend fun onValidCredentialCheck(): Result<Instant> {
+	suspend fun onValidCredentialCheck(): Result<Instant?> {
 		return withContext(viewModelScope.coroutineContext) {
 			val credential = secretsRepository.get().getCredential()
 			if (credential != null) {
@@ -113,7 +115,7 @@ constructor(
 		}
 	}
 
-	private suspend fun getCredentialExpiry(credential: String): Result<Instant> {
+	private suspend fun getCredentialExpiry(credential: String): Result<Instant?> {
 		return vpnClient.get().validateCredential(credential).onFailure {
 			return Result.failure(NymVpnExceptions.InvalidCredentialException())
 		}

@@ -104,19 +104,21 @@ object LogcatHelper {
 			val outputFilePath = Paths.get(outputFile.absolutePath)
 			val logcatPath = Paths.get(sourceDir)
 
-			Files.list(logcatPath)
-				.sorted { o1, o2 ->
+			Files.list(logcatPath).use {
+				it.sorted { o1, o2 ->
 					Files.getLastModifiedTime(o1).compareTo(Files.getLastModifiedTime(o2))
 				}
-				.flatMap(Files::lines)
-				.forEach { line ->
-					Files.write(
-						outputFilePath,
-						(line + System.lineSeparator()).toByteArray(),
-						StandardOpenOption.CREATE,
-						StandardOpenOption.APPEND,
-					)
-				}
+					.flatMap(Files::lines).use { lines ->
+						lines.forEach { line ->
+							Files.write(
+								outputFilePath,
+								(line + System.lineSeparator()).toByteArray(),
+								StandardOpenOption.CREATE,
+								StandardOpenOption.APPEND,
+							)
+						}
+					}
+			}
 		}
 
 		override suspend fun getLogFile(): Result<File> {
