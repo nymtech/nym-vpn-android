@@ -872,7 +872,7 @@ private fun uniffiCheckContractApiVersion(lib: UniffiLib) {
 
 @Suppress("UNUSED_PARAMETER")
 private fun uniffiCheckApiChecksums(lib: UniffiLib) {
-    if (lib.uniffi_nym_vpn_lib_checksum_func_checkcredential() != 44396.toShort()) {
+    if (lib.uniffi_nym_vpn_lib_checksum_func_checkcredential() != 2527.toShort()) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if (lib.uniffi_nym_vpn_lib_checksum_func_getgatewaycountries() != 4475.toShort()) {
@@ -1576,6 +1576,35 @@ public object FfiConverterOptionalDouble: FfiConverterRustBuffer<kotlin.Double?>
 
 
 
+public object FfiConverterOptionalTimestamp: FfiConverterRustBuffer<java.time.Instant?> {
+    override fun read(buf: ByteBuffer): java.time.Instant? {
+        if (buf.get().toInt() == 0) {
+            return null
+        }
+        return FfiConverterTimestamp.read(buf)
+    }
+
+    override fun allocationSize(value: java.time.Instant?): ULong {
+        if (value == null) {
+            return 1UL
+        } else {
+            return 1UL + FfiConverterTimestamp.allocationSize(value)
+        }
+    }
+
+    override fun write(value: java.time.Instant?, buf: ByteBuffer) {
+        if (value == null) {
+            buf.put(0)
+        } else {
+            buf.put(1)
+            FfiConverterTimestamp.write(value, buf)
+        }
+    }
+}
+
+
+
+
 public object FfiConverterOptionalTypePathBuf: FfiConverterRustBuffer<PathBuf?> {
     override fun read(buf: ByteBuffer): PathBuf? {
         if (buf.get().toInt() == 0) {
@@ -1725,8 +1754,8 @@ public object FfiConverterTypeUrl: FfiConverter<Url, RustBuffer.ByValue> {
         FfiConverterString.write(builtinValue, buf)
     }
 }
-    @Throws(FfiException::class) fun `checkCredential`(`credential`: kotlin.String): java.time.Instant {
-            return FfiConverterTimestamp.lift(
+    @Throws(FfiException::class) fun `checkCredential`(`credential`: kotlin.String): java.time.Instant? {
+            return FfiConverterOptionalTimestamp.lift(
     uniffiRustCallWithError(FfiException) { _status ->
     UniffiLib.INSTANCE.uniffi_nym_vpn_lib_fn_func_checkcredential(
         FfiConverterString.lower(`credential`),_status)
